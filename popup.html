@@ -1,52 +1,182 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <title>Amazon Prime X-Ray Disabler</title>
+    <meta charset="UTF-8" />
+    <title>X-Ray Disabler</title>
     <style>
+      :root {
+        --bg-grad-from: #0F171E;
+        --bg-grad-to: #1A242F;
+        --card: #1F2A37;
+        --card-border: #2D3A48;
+        --text: #F2F4F6;
+        --text-dim: #8197A4;
+        --prime: #00A8E1;
+        --prime-hover: #1FB6E8;
+        --accent: #FF9900;
+        --success: #37F1A3;
+        --danger: #FF4D4F;
+      }
+
+      * { box-sizing: border-box; }
+
       body {
-        font-family: Arial, sans-serif;
-        padding: 20px;
-        background-color: #232F3E;
-        color: #FFFFFF;
-        text-align: center;
+        margin: 0;
+        width: 280px;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Amazon Ember",
+          Helvetica, Arial, sans-serif;
+        background: linear-gradient(160deg, var(--bg-grad-from) 0%, var(--bg-grad-to) 100%);
+        color: var(--text);
+        -webkit-font-smoothing: antialiased;
       }
-      h1 {
-        font-size: 16px;
-        margin-bottom: 20px;
-        color: #FF9900;
+
+      .wrap {
+        padding: 20px 20px 18px;
       }
+
+      .header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 18px;
+      }
+
+      .logo {
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        background: linear-gradient(135deg, var(--prime) 0%, #0073BB 100%);
+        display: grid;
+        place-items: center;
+        flex-shrink: 0;
+        box-shadow: 0 2px 8px rgba(0, 168, 225, 0.35);
+      }
+
+      .logo svg { width: 18px; height: 18px; }
+
+      .title {
+        font-size: 14px;
+        font-weight: 600;
+        letter-spacing: 0.2px;
+        line-height: 1.2;
+      }
+
+      .title .accent { color: var(--accent); }
+
+      .subtitle {
+        font-size: 11px;
+        color: var(--text-dim);
+        margin-top: 2px;
+      }
+
+      .status-card {
+        background: var(--card);
+        border: 1px solid var(--card-border);
+        border-radius: 10px;
+        padding: 14px;
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .status-label {
+        font-size: 11px;
+        color: var(--text-dim);
+        text-transform: uppercase;
+        letter-spacing: 0.6px;
+        margin-bottom: 4px;
+      }
+
+      .status-value {
+        font-size: 14px;
+        font-weight: 600;
+      }
+
+      .dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        flex-shrink: 0;
+        box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.04);
+      }
+
+      .dot.on  { background: var(--success); box-shadow: 0 0 12px rgba(55, 241, 163, 0.5); }
+      .dot.off { background: var(--danger);  box-shadow: 0 0 12px rgba(255, 77, 79, 0.4); }
+
       #toggleButton {
-        padding: 6px 18px;
-        background-color: #0073BB; 
+        width: 100%;
+        padding: 11px 16px;
+        background: var(--prime);
         color: white;
         border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 16px;
-        transition: background-color 0.3s ease;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      }
-      #toggleButton:hover {
-        background-color: #005999;
-      }
-      #toggleButton:active {
-        background-color: #004080;
-      }
-      .container {
-        max-width: 300px;
-        margin: 0 auto;
-        background-color: #1C2A38;
-        padding: 20px;
         border-radius: 10px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.15s ease, transform 0.05s ease;
+        font-family: inherit;
+        letter-spacing: 0.2px;
       }
+
+      #toggleButton:hover  { background: var(--prime-hover); }
+      #toggleButton:active { transform: scale(0.98); }
+
+      #toggleButton.is-disabled-state {
+        background: #2D3A48;
+        color: var(--text);
+      }
+      #toggleButton.is-disabled-state:hover { background: #3A4858; }
+
+      .footer {
+        margin-top: 14px;
+        padding-top: 12px;
+        border-top: 1px solid var(--card-border);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 10px;
+        color: var(--text-dim);
+      }
+
+      .footer a {
+        color: var(--text-dim);
+        text-decoration: none;
+        transition: color 0.15s;
+      }
+      .footer a:hover { color: var(--prime); }
     </style>
-    <meta charset="UTF-8">
   </head>
   <body>
-    <div class="container">
-      <h1>X-Ray Removal!</h1>
-      <button id="toggleButton">On/Off</button>
+    <div class="wrap">
+      <div class="header">
+        <div class="logo">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 12s3.5-7 9-7 9 7 9 7-3.5 7-9 7-9-7-9-7z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="12" cy="12" r="3" stroke="white" stroke-width="2"/>
+            <line x1="4" y1="20" x2="20" y2="4" stroke="white" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div>
+          <div class="title">X-Ray <span class="accent">Disabler</span></div>
+          <div class="subtitle">for Amazon Prime Video</div>
+        </div>
+      </div>
+
+      <div class="status-card">
+        <div>
+          <div class="status-label">Status</div>
+          <div class="status-value" id="statusText">Loading…</div>
+        </div>
+        <div class="dot off" id="statusDot"></div>
+      </div>
+
+      <button id="toggleButton">Loading…</button>
+
+      <div class="footer">
+        <span id="versionLabel">v1.3</span>
+        <a href="https://github.com/taskinbirtan/amazon.prime.x-ray.disabler" target="_blank" rel="noopener">GitHub</a>
+      </div>
     </div>
     <script src="popup.js"></script>
   </body>
