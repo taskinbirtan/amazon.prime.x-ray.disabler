@@ -1,19 +1,28 @@
 {
   "manifest_version": 3,
   "name": "Amazon Prime X-Ray Disabler",
-  "version": "1.0",
-  "description": "Disables the X-Ray Vision feature on Amazon Prime Video.",
+  "version": "1.3",
+  "description": "Hides the X-Ray panel and pop-ups on Amazon Prime Video so spoilers don't ruin your watch.",
   "permissions": [
     "activeTab",
-    "storage"
+    "storage",
+    "scripting",
+    "tabs"
+  ],
+  "host_permissions": [
+    "*://*.primevideo.com/*",
+    "*://*.amazon.com/*",
+    "*://*.amazon.co.uk/*",
+    "*://*.amazon.de/*"
   ],
   "background": {
     "service_worker": "background.js"
   },
   "content_scripts": [
     {
-      "matches": ["*://www.primevideo.com/*"],
-      "js": ["content.js"]
+      "matches": ["*://*.primevideo.com/*", "*://*.amazon.com/*", "*://*.amazon.co.uk/*", "*://*.amazon.de/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
     }
   ],
   "action": {
