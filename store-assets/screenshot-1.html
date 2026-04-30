@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; }
+  html, body { background: transparent; }
+
+  .frame {
+    width: 1280px;
+    height: 800px;
+    background:
+      radial-gradient(ellipse at 80% 10%, rgba(0, 168, 225, 0.22), transparent 50%),
+      radial-gradient(ellipse at 10% 90%, rgba(255, 153, 0, 0.12), transparent 50%),
+      linear-gradient(165deg, #0F171E 0%, #1A242F 100%);
+    padding: 64px 80px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .frame::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+    background-size: 40px 40px;
+    mask-image: radial-gradient(ellipse at center, black 30%, transparent 90%);
+    -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 90%);
+  }
+
+  .header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 38px;
+    z-index: 2;
+  }
+
+  .icon-mini {
+    width: 56px;
+    height: 56px;
+    border-radius: 14px;
+    background: linear-gradient(140deg, #00A8E1, #0073BB);
+    display: grid;
+    place-items: center;
+    box-shadow: 0 6px 20px rgba(0, 168, 225, 0.35);
+  }
+
+  .icon-mini svg { width: 32px; height: 32px; }
+
+  .header-text .name { color: white; font-size: 22px; font-weight: 700; letter-spacing: -0.3px; }
+  .header-text .sub { color: #8197A4; font-size: 13px; margin-top: 2px; }
+
+  .hero {
+    z-index: 2;
+    margin-bottom: 32px;
+  }
+
+  .hero h1 {
+    color: white;
+    font-size: 64px;
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -1.5px;
+    margin-bottom: 18px;
+  }
+
+  .hero h1 .accent {
+    background: linear-gradient(90deg, #00A8E1 0%, #5FD4F5 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .hero h1 .strike {
+    position: relative;
+    color: #5C6B7A;
+  }
+  .hero h1 .strike::after {
+    content: '';
+    position: absolute;
+    left: -4px;
+    right: -4px;
+    top: 50%;
+    height: 6px;
+    background: #FF9900;
+    transform: translateY(-50%) rotate(-3deg);
+    border-radius: 3px;
+  }
+
+  .hero p {
+    color: #B8C5D3;
+    font-size: 22px;
+    line-height: 1.4;
+    max-width: 720px;
+    font-weight: 400;
+  }
+
+  .compare {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 28px;
+    align-items: center;
+    z-index: 2;
+    margin-top: auto;
+  }
+
+  .panel {
+    border-radius: 18px;
+    overflow: hidden;
+    background: #1F2A37;
+    border: 1px solid #2D3A48;
+    box-shadow: 0 16px 40px rgba(0,0,0,0.4);
+    aspect-ratio: 16/10;
+    position: relative;
+  }
+
+  .panel-label {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    padding: 6px 12px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border-radius: 6px;
+    z-index: 5;
+  }
+
+  .panel-label.bad { background: rgba(255, 77, 79, 0.15); color: #FF6B6E; border: 1px solid rgba(255, 77, 79, 0.4); }
+  .panel-label.good { background: rgba(55, 241, 163, 0.15); color: #37F1A3; border: 1px solid rgba(55, 241, 163, 0.4); }
+
+  .player {
+    width: 100%;
+    height: 100%;
+    background:
+      linear-gradient(180deg, transparent 50%, rgba(0,0,0,0.6) 100%),
+      linear-gradient(135deg, #2A1810 0%, #1A0F08 70%);
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    padding: 18px;
+  }
+
+  .player::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at 30% 40%, rgba(255, 153, 0, 0.25), transparent 50%),
+      radial-gradient(circle at 70% 60%, rgba(180, 60, 40, 0.3), transparent 60%);
+  }
+
+  .player .title {
+    color: white;
+    font-size: 14px;
+    font-weight: 700;
+    z-index: 2;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.8);
+  }
+  .player .meta {
+    color: #ddd;
+    font-size: 10px;
+    z-index: 2;
+    margin-top: 2px;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.8);
+  }
+
+  /* X-Ray panel overlay */
+  .xray {
+    position: absolute;
+    top: 50px;
+    right: 14px;
+    width: 38%;
+    background: rgba(15, 23, 30, 0.92);
+    backdrop-filter: blur(8px);
+    border-radius: 8px;
+    padding: 12px;
+    z-index: 4;
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .xray-header { color: white; font-size: 11px; font-weight: 700; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+  .xray-header .imdb { background: #F5C518; color: black; font-size: 8px; font-weight: 700; padding: 2px 5px; border-radius: 2px; }
+
+  .cast-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .cast-item { display: flex; gap: 6px; align-items: center; }
+  .cast-pic { width: 22px; height: 22px; border-radius: 3px; background: #444; flex-shrink: 0; }
+  .cast-pic.a1 { background: linear-gradient(135deg, #8B6F47, #5C4A33); }
+  .cast-pic.a2 { background: linear-gradient(135deg, #C9A87C, #8B7355); }
+  .cast-pic.a3 { background: linear-gradient(135deg, #6B5D54, #3D332C); }
+  .cast-pic.a4 { background: linear-gradient(135deg, #B8956F, #7A6347); }
+  .cast-info .name { color: white; font-size: 8px; font-weight: 600; line-height: 1.1; }
+  .cast-info .role { color: #888; font-size: 7px; line-height: 1.1; margin-top: 1px; }
+
+  .arrow {
+    color: #FF9900;
+    font-size: 48px;
+    font-weight: 200;
+    z-index: 2;
+  }
+</style>
+</head>
+<body>
+<div class="frame">
+  <div class="header">
+    <div class="icon-mini">
+      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <path d="M10 50 Q 50 14, 90 50 Q 50 86, 10 50 Z" fill="none" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+        <circle cx="50" cy="50" r="14" fill="none" stroke="white" stroke-width="6"/>
+        <circle cx="50" cy="50" r="5" fill="white"/>
+        <line x1="14" y1="86" x2="86" y2="14" stroke="#FF9900" stroke-width="9" stroke-linecap="round"/>
+        <line x1="14" y1="86" x2="86" y2="14" stroke="white" stroke-width="3" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div class="header-text">
+      <div class="name">X-Ray Disabler</div>
+      <div class="sub">For Amazon Prime Video</div>
+    </div>
+  </div>
+
+  <div class="hero">
+    <h1>Watch <span class="strike">spoilers.</span><br>Just <span class="accent">watch the movie.</span></h1>
+    <p>Hides the X-Ray panel and pop-ups on Prime Video so cast names, trivia and song titles don't ruin the moment.</p>
+  </div>
+
+  <div class="compare">
+    <div class="panel">
+      <div class="panel-label bad">Before</div>
+      <div class="player">
+        <div class="xray">
+          <div class="xray-header">X-RAY <span class="imdb">IMDb</span></div>
+          <div class="cast-grid">
+            <div class="cast-item"><div class="cast-pic a1"></div><div class="cast-info"><div class="name">Robert Loggia</div><div class="role">Frank Lopez</div></div></div>
+            <div class="cast-item"><div class="cast-pic a2"></div><div class="cast-info"><div class="name">Steven Bauer</div><div class="role">Manny Ribera</div></div></div>
+            <div class="cast-item"><div class="cast-pic a3"></div><div class="cast-info"><div class="name">Al Pacino</div><div class="role">Tony Montana</div></div></div>
+            <div class="cast-item"><div class="cast-pic a4"></div><div class="cast-info"><div class="name">F. Murray</div><div class="role">Omar Suarez</div></div></div>
+          </div>
+        </div>
+        <div>
+          <div class="title">Scarface</div>
+          <div class="meta">2:42:00 · 1985</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="arrow">→</div>
+
+    <div class="panel">
+      <div class="panel-label good">After</div>
+      <div class="player">
+        <div>
+          <div class="title">Scarface</div>
+          <div class="meta">2:42:00 · 1985</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
